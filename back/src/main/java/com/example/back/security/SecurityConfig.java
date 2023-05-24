@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.back.config.AppProps;
 import com.example.back.service.CustomUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final CustomUserDetailsService customUserDetailsService;
+    private final AppProps appProps;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(SecurityConstants.SIGN_UP_URLS).permitAll()
+                .antMatchers(appProps.getSignUpURLS()).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

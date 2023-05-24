@@ -59,16 +59,24 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = LocalDateTime.now();
+    }
+
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
+    /**
+     * SECURITY
+     */
     @Override
-    public boolean isAccountNonExpired() {
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
@@ -85,11 +93,6 @@ public class User implements UserDetails {
     @Override
     public String getPassword() {
         return password;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
     }
 
 }

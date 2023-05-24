@@ -9,24 +9,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.example.back.config.AppProps;
 import com.example.back.entity.User;
 
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author s.melekhin
  * @since 29 март 2023 г.
  */
 @Component
+@RequiredArgsConstructor
 public class JWTTokenProvider {
 
     public static final Logger LOG = LoggerFactory.getLogger(JWTTokenProvider.class);
+
+    private final AppProps appProps;
 
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         Date now = new Date(System.currentTimeMillis());
-        Date expiryDate = new Date(now.getTime() + SecurityConstants.EXPIRATION_TIME);
+        Date expiryDate = new Date(now.getTime() + appProps.getExpirationTime());
 
         String userId = Long.toString(user.getId());
 
@@ -41,14 +46,14 @@ public class JWTTokenProvider {
                 .addClaims(claimsMap)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.ES512, SecurityConstants.SECRET)
+                .signWith(SignatureAlgorithm.ES512, appProps.getSecret())
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(SecurityConstants.SECRET)
+                    .setSigningKey(appProps.getSecret())
                     .parseClaimsJws(token);
             return true;
         } catch (SignatureException |
@@ -63,7 +68,7 @@ public class JWTTokenProvider {
 
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.SECRET)
+                .setSigningKey(appProps.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
         return Long.parseLong((String)claims.get("id"));

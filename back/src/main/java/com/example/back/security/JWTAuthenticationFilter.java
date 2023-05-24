@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.back.config.AppProps;
 import com.example.back.entity.User;
 import com.example.back.service.CustomUserDetailsService;
 
@@ -32,6 +33,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private JWTTokenProvider jwtTokenProvider;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private AppProps appProps;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -51,8 +54,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
-        String bearToken = request.getHeader(SecurityConstants.HEADER_STRING);
-        if (StringUtils.hasText(bearToken) && bearToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        String bearToken = request.getHeader(appProps.getHeaderString());
+        if (StringUtils.hasText(bearToken) && bearToken.startsWith(appProps.getTokenPrefix())) {
             return bearToken.split(" ")[1];
         }
         return null;
