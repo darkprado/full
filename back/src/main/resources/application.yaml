@@ -24,7 +24,7 @@ spring:
 #      schema-locations: classpath:schema.sql
 
 application:
-  signUpURLS: /api/auth/**
+  signUpURLS: /auth/**
   secret: SecretKeyGenJWT
   tokenPrefix: 'Bearer '
   headerString: Authorization

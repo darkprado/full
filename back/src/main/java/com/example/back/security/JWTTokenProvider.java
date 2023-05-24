@@ -46,7 +46,7 @@ public class JWTTokenProvider {
                 .addClaims(claimsMap)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.ES512, appProps.getSecret())
+                .signWith(SignatureAlgorithm.HS512, appProps.getSecret())
                 .compact();
     }
 
