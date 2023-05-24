@@ -35,7 +35,7 @@ public class User implements UserDetails {
     private String lastname;
     @Column(unique = true, updatable = false)
     private String username;
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     private String email;
     @Column(columnDefinition = "text")
     private String bio;

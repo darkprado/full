@@ -1,14 +1,17 @@
 package com.example.back.service;
 
+import java.security.Principal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.back.dao.UserDao;
+import com.example.back.dto.UserDto;
 import com.example.back.entity.User;
-import com.example.back.enums.ERole;
 import com.example.back.exception.UserExistsException;
+import com.example.back.mapper.UserMapper;
 import com.example.back.payload.request.SignupRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -24,16 +27,10 @@ public class UserService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserDao userDao;
-    private final BCryptPasswordEncoder encoder;
+    private final UserMapper userMapper;
 
     public User save(SignupRequest request) {
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setUsername(request.getUsername());
-        user.setFirstname(request.getFirstname());
-        user.setLastname(request.getLastname());
-        user.setPassword(encoder.encode(request.getPassword()));
-        user.getRoles().add(ERole.ROLE_USER);
+        User user = userMapper.createFromRequest(request);
 
         try {
             LOG.info("Saving user withusername {}", user.getUsername());
@@ -42,6 +39,22 @@ public class UserService {
             LOG.error("Error during registration. {}", ex.getMessage());
             throw new UserExistsException(String.format("User with username %s alredy exist.", user.getUsername()));
         }
+    }
+
+    public User update(UserDto userDto, Principal principal) {
+        User user = getUserByPrincipal(principal);
+        LOG.info(String.format("Updating user witn username %s", user.getUsername()));
+        return userDao.save(userMapper.updateFromDto(userDto, user));
+    }
+
+    public User getCurrentUser(Principal principal) {
+        return getUserByPrincipal(principal);
+    }
+
+    private User getUserByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userDao.findUserByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
     }
 
 }
