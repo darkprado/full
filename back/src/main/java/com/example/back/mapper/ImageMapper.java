@@ -19,7 +19,7 @@ import com.example.back.entity.User;
  * @author s.melekhin
  * @since 24 май 2023 г.
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ImageMapper {
 
     Logger LOG = LoggerFactory.getLogger(ImageMapper.class);
