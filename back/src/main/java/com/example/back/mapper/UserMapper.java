@@ -30,8 +30,10 @@ public abstract class UserMapper {
 
     @Mapping(target = "password", source = "request", qualifiedByName = "mapPassword")
     @Mapping(target = "roles", source = "request", qualifiedByName = "mapRoles")
-    public abstract User createFromRequest(SignupRequest request);
+    public abstract User fromRequest(SignupRequest request);
 
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "posts", ignore = true)
     @Mapping(target = "firstname", source = "userDto.firstname")
     @Mapping(target = "lastname", source = "userDto.lastname")
     @Mapping(target = "bio", source = "userDto.bio")
@@ -40,9 +42,9 @@ public abstract class UserMapper {
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "password", source = "user.password")
     @Mapping(target = "createdDate", source = "user.createdDate")
-    @Mapping(target = "roles", ignore = true)
-    @Mapping(target = "posts", ignore = true)
-    public abstract User updateFromDto(UserDto userDto, User user);
+    public abstract User fromDto(UserDto userDto, User user);
+
+    public abstract UserDto toDto(User user);
 
     @Named("mapPassword")
     public String mapPassword(SignupRequest request) {

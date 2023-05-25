@@ -13,7 +13,6 @@ import com.example.back.dao.ImageModelDao;
 import com.example.back.dao.PostDao;
 import com.example.back.dao.UserDao;
 import com.example.back.dto.PostDto;
-import com.example.back.entity.ImageModel;
 import com.example.back.entity.Post;
 import com.example.back.entity.User;
 import com.example.back.exception.PostNotFoundException;
@@ -38,27 +37,27 @@ public class PostService {
 
     public Post save(PostDto postDto, Principal principal) {
         User user = getUserByPrincipal(principal);
-        LOG.info(String.format("Saving post for user with username %s", user.getUsername()));
-        return postDao.save(postMapper.toPostCreate(postDto, user));
+        LOG.info("Saving post for user with username {}", user.getUsername());
+        return postDao.save(postMapper.fromDto(postDto, user));
     }
 
-    public List<Post> getAllPosts() {
+    public List<Post> getAll() {
         return postDao.findAllByOrderByCreatedDateDesc();
     }
 
-    public Post getPostById(Long id, Principal principal) {
+    public Post getPostById(Long postId, Principal principal) {
         User user = getUserByPrincipal(principal);
-        return postDao.findPostByIdAndUser(id, user).orElseThrow(
-                () -> new PostNotFoundException(String.format("Post with id %s from user with username %s not found", id, user.getUsername())));
+        return postDao.findPostByIdAndUser(postId, user).orElseThrow(
+                () -> new PostNotFoundException(String.format("Post with id %s from user with username %s not found", postId, user.getUsername())));
     }
 
-    public List<Post> getAllPostsByUser(Principal principal) {
+    public List<Post> getAllByUser(Principal principal) {
         return postDao.findAllByUserOrderByCreatedDateDesc(getUserByPrincipal(principal));
     }
 
-    public Post likePost(Long id, String username) {
-        Post post = postDao.findById(id).orElseThrow(
-                () -> new PostNotFoundException(String.format("Post with id %s not found", id))
+    public Post like(Long postId, String username) {
+        Post post = postDao.findById(postId).orElseThrow(
+                () -> new PostNotFoundException(String.format("Post with id %s not found", postId))
         );
 
         Optional<String> userLike = post.getLikedUsers().stream().filter(u -> u.equals(username)).findAny();
@@ -73,11 +72,10 @@ public class PostService {
         return postDao.save(post);
     }
 
-    public void deletePost(Long id, Principal principal) {
+    public void delete(Long id, Principal principal) {
         Post post = getPostById(id, principal);
-        Optional<ImageModel> imageModel = imageModelDao.findByPostId(post.getId());
         postDao.delete(post);
-        imageModel.ifPresent(imageModelDao::delete);
+        imageModelDao.findByPostId(post.getId()).ifPresent(imageModelDao::delete);
     }
 
     private User getUserByPrincipal(Principal principal) {

@@ -1,7 +1,5 @@
 package com.example.back.mapper;
 
-import java.util.Set;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -19,13 +17,16 @@ public interface PostMapper {
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "likedUsers", ignore = true)
-    @Mapping(target = "likes", source = "postDto", qualifiedByName = "likes")
+    @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "id", source = "postDto.id")
-    Post toPostCreate(PostDto postDto, User user);
+    @Mapping(target = "likes", source = "postDto", qualifiedByName = "likes")
+    Post fromDto(PostDto postDto, User user);
 
     @Named("likes")
     default Integer mapLikedUsers(PostDto postDto) {
         return 0;
     }
 
+    @Mapping(target = "username", source = "post.user.username")
+    PostDto toDto(Post post);
 }

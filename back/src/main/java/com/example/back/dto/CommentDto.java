@@ -9,14 +9,11 @@ import lombok.Data;
  * @since 24 май 2023 г.
  */
 @Data
-public class UserDto {
+public class CommentDto {
 
     private Long id;
     @NotEmpty
-    private String firstname;
-    @NotEmpty
-    private String lastname;
+    private String message;
     private String username;
-    private String bio;
 
 }

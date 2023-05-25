@@ -30,21 +30,27 @@ public class UserService {
     private final UserMapper userMapper;
 
     public User save(SignupRequest request) {
-        User user = userMapper.createFromRequest(request);
+        User user = userMapper.fromRequest(request);
 
         try {
             LOG.info("Saving user withusername {}", user.getUsername());
             return userDao.save(user);
         } catch (Exception ex) {
             LOG.error("Error during registration. {}", ex.getMessage());
-            throw new UserExistsException(String.format("User with username %s alredy exist.", user.getUsername()));
+            throw new UserExistsException(String.format("User with username %s already exist.", user.getUsername()));
         }
     }
 
     public User update(UserDto userDto, Principal principal) {
         User user = getUserByPrincipal(principal);
-        LOG.info(String.format("Updating user witn username %s", user.getUsername()));
-        return userDao.save(userMapper.updateFromDto(userDto, user));
+        LOG.info(String.format("Updating user with username %s", user.getUsername()));
+        return userDao.save(userMapper.fromDto(userDto, user));
+    }
+
+    public User getById(Long userId) {
+        return userDao.findUserById(userId).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("User with id %s not found.", userId))
+        );
     }
 
     public User getCurrentUser(Principal principal) {
