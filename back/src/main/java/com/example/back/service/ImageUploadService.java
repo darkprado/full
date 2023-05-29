@@ -3,6 +3,7 @@ package com.example.back.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
@@ -52,15 +53,12 @@ public class ImageUploadService {
     public ImageModel uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException {
         User user = getUserByPrincipal(principal);
         ImageModel postImage = imageModelDao.findByPostId(user.getId()).orElse(null);
-        if (!ObjectUtils.isEmpty(postImage)) {
-            imageModelDao.delete(postImage);
-        }
         Post post = user.getPosts()
                 .stream()
                 .filter(p -> p.getId().equals(postId))
                 .collect(toSinglePostCollector());
         LOG.info("Uploading image to Post with id {}", post.getId());
-        return imageModelDao.save(imageMapper.toPostImage(file, post));
+        return imageModelDao.save(imageMapper.toPostImage(file, post, Objects.nonNull(postImage) ? postImage.getId() : null));
     }
 
     public ImageModel getImageToUser(Principal principal) {

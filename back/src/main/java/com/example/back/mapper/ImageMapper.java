@@ -30,11 +30,11 @@ public interface ImageMapper {
     ImageModel toUserImage(MultipartFile file, User user);
 
     @Mapping(target = "userId", ignore = true)
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "imageBytes", ignore = true)
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "postId", source = "post.id")
-    ImageModel toPostImage(MultipartFile file, Post post);
+    ImageModel toPostImage(MultipartFile file, Post post, Long id);
 
     @AfterMapping
     default void afterMapping(@MappingTarget ImageModel imageModel, MultipartFile file) {
