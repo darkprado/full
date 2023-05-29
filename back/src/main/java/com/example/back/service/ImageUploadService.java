@@ -51,6 +51,10 @@ public class ImageUploadService {
 
     public ImageModel uploadImageToPost(MultipartFile file, Principal principal, Long postId) throws IOException {
         User user = getUserByPrincipal(principal);
+        ImageModel postImage = imageModelDao.findByPostId(user.getId()).orElse(null);
+        if (!ObjectUtils.isEmpty(postImage)) {
+            imageModelDao.delete(postImage);
+        }
         Post post = user.getPosts()
                 .stream()
                 .filter(p -> p.getId().equals(postId))

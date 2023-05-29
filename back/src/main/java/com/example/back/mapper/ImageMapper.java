@@ -23,12 +23,14 @@ public interface ImageMapper {
     Logger LOG = LoggerFactory.getLogger(ImageMapper.class);
 
     @Mapping(target = "postId", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "imageBytes", ignore = true)
     @Mapping(target = "userId", source = "user.id")
     ImageModel toUserImage(MultipartFile file, User user);
 
     @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "imageBytes", ignore = true)
     @Mapping(target = "postId", source = "post.id")
