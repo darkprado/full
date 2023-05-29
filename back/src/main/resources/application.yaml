@@ -29,4 +29,4 @@ application:
   tokenPrefix: 'Bearer '
   headerString: Authorization
   contentType: application/json
-  expirationTime: 600_000
+  expirationTime: 600_000_000

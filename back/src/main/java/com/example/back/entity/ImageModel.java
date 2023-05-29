@@ -24,7 +24,7 @@ public class ImageModel {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Lob
+//    @Lob
     @Column(columnDefinition = "bytea")
     private byte[] imageBytes;
     @JsonIgnore

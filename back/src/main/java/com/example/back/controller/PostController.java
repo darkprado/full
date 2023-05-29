@@ -66,7 +66,7 @@ public class PostController {
         return new ResponseEntity<>(postMapper.toDto(postService.like(Long.parseLong(postId), username)), HttpStatus.OK);
     }
 
-    @PostMapping("/{postId}/delete")
+    @DeleteMapping("/{postId}/delete")
     public ResponseEntity<MessageResponse> deletePost(@PathVariable("postId") String postId, Principal principal) {
         postService.delete(Long.parseLong(postId), principal);
         return new ResponseEntity<>(new MessageResponse(String.format("Post with id %s was deleted", postId)), HttpStatus.OK);

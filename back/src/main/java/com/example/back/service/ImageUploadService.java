@@ -16,7 +16,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.back.dao.ImageModelDao;
-import com.example.back.dao.PostDao;
 import com.example.back.dao.UserDao;
 import com.example.back.entity.ImageModel;
 import com.example.back.entity.Post;
@@ -38,7 +37,6 @@ public class ImageUploadService {
 
     private final ImageModelDao imageModelDao;
     private final UserDao userDao;
-    private final PostDao postDao;
     private final ImageMapper imageMapper;
 
     public ImageModel uploadImageToUser(MultipartFile file, Principal principal) {
