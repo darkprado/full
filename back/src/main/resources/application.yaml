@@ -25,6 +25,8 @@ spring:
 
 application:
   signUpURLS: /auth/**
+  swaggerURLS: /swagger-ui/**
+  v3URLS: /v3/**
   secret: SecretKeyGenJWT
   tokenPrefix: 'Bearer '
   headerString: Authorization

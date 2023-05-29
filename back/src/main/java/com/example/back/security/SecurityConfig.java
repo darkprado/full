@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(appProps.getSignUpURLS()).permitAll()
+                .antMatchers(appProps.getSignUpURLS(), appProps.getV3URLS(), appProps.getSwaggerURLS()).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class AppProps implements SecurityProps {
 
     private String signUpURLS;
+    private String v3URLS;
+    private String swaggerURLS;
     private String secret;
     private String tokenPrefix;
     private String headerString;
@@ -51,6 +53,26 @@ public class AppProps implements SecurityProps {
     @Override
     public void setSignUpURLS(String signUpURLS) {
         this.signUpURLS = signUpURLS;
+    }
+
+    @Override
+    public String getV3URLS() {
+        return v3URLS;
+    }
+
+    @Override
+    public void setV3URLS(String v3URLS) {
+        this.v3URLS = v3URLS;
+    }
+
+    @Override
+    public String getSwaggerURLS() {
+        return swaggerURLS;
+    }
+
+    @Override
+    public void setSwaggerURLS(String swaggerURLS) {
+        this.swaggerURLS = swaggerURLS;
     }
 
     @Override

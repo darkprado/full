@@ -7,10 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import com.example.back.entity.User;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 /**
  * @author s.melekhin
  * @since 27 март 2023 г.
  */
+@Hidden
 @Repository
 public interface UserDao extends JpaRepository<User, Long> {
 

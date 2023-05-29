@@ -21,6 +21,8 @@ import com.example.back.security.JWTTokenProvider;
 import com.example.back.service.UserService;
 import com.example.back.validation.ResponseErrorValidator;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -40,6 +42,10 @@ public class AuthController {
     private final JWTTokenProvider jwtTokenProvider;
     private final AppProps appProps;
 
+    @Operation(
+            operationId = "Регистрация", description = "Регистрация пользователя",
+            parameters = { @Parameter(name = "request", description = "Данные пользователя") }
+    )
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@Valid @RequestBody SignupRequest request, BindingResult bindingResult) {
         ResponseEntity<Object> errors = errorValidator.mapValidation(bindingResult);
@@ -50,6 +56,10 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
+    @Operation(
+            operationId = "Авторизация", description = "Авторизация пользователя",
+            parameters = { @Parameter(name = "request", description = "Данные пользователя") }
+    )
     @PostMapping("/signin")
     public ResponseEntity<Object> signin(@Valid @RequestBody LoginRequest request, BindingResult bindingResult) {
         ResponseEntity<Object> errors = errorValidator.mapValidation(bindingResult);

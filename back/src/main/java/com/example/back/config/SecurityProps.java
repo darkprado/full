@@ -10,6 +10,14 @@ public interface SecurityProps {
 
     void setSignUpURLS(String signUpURLS);
 
+    String getV3URLS();
+
+    void setV3URLS(String v3URLS);
+
+    String getSwaggerURLS();
+
+    void setSwaggerURLS(String swaggerURLS);
+
     String getSecret();
 
     void setSecret(String secret);
